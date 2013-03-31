@@ -1,0 +1,37 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/11-App
+
+# default values
+#all:
+  
+all:
+  bot:
+    # стоимость бота
+    price: 45
+    # скидка за продление лицензии, до истечения ее срока действия
+    pre_end_discount: 10
+    # цена одногоместа для персонажа
+    add_char_price: 10
+    add_char_mounts_price: 20
+    message_need_more_money: У Вас недостаточно средств, для выполнения данной операции
+  
+  sf_guard_plugin:
+    routes_register: false
+    profile_class:      sfGuardUserProfile
+    profile_field_name: user_id
+    
+  sf_captchagd:
+    image_width:                100 # image width in pixels
+    image_height:               30 # image height in pixels
+    chars:                      "123456789" # possible chars in captcha
+    length:                     4 # length of captcha
+    font_size:                  18 # font size
+    force_new_captcha:          true # if true - captcha regenerated EVERY request, even if user input true value before
+
+    # possible chars colors
+    font_color:                 ["252525", "8b8787", "550707", "3526E6", "88531E"]
+
+    # chars fonts
+    fonts:                      ["akbar/akbar.ttf", "brushcut/BRUSHCUT.TTF", "molten/molten.ttf", "planet_benson/Planetbe.ttf", "whoobub/WHOOBUB_.TTF"] 
+    background_color:           DDDDDD # image background color
+    border_color:               000000 # image border color

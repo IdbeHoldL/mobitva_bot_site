@@ -1,0 +1,157 @@
+propel:
+  
+  # Профиль пользователя
+  sf_guard_user_profile:
+    _attributes:    { phpName: sfGuardUserProfile }
+    id:             ~
+    user_id:        { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    balance:        { type: float, required: false }
+    nickname:       { type: varchar, required: true }
+    auth_key:       { type: varchar, required: true }
+    created_at:     ~
+    updated_at:     ~
+  
+  # 
+  messages:
+    _attributes:    { phpName: messages }
+    id:             ~
+    user_id:        { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    from:           { type: varchar, required: true }
+    title:          { type: varchar, required: true }
+    body:           { type: longvarchar, required: true }
+    is_readed:      { type: boolean, required: false}
+    created_at:     ~
+    updated_at:     ~
+    
+  # сессии бота. текучая таблица.
+  bot_session:
+    _attributes:            { phpName: botSession }
+    id:                     ~
+    user_id:                { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    # хеш, своего образа, сессия для самого бота.
+    # передается при каждом запросе к апи. Если хеш не совпадает - запрос вернет ошибку.
+    # пользователю нужно будет занова залогиниться.
+    access_key: { type: varchar, required: true }
+    # уникальный идентификатор компьютера. Если при создании нового ключа (новой авторизации)
+    # ключ не совпадает, с предыдущими, всем сессиям присваевается новый кеш, тем самым обрывая 
+    # соединение, для других клиентов.
+    connect_ip:     { type: varchar, required: true }
+    hardware_key:   { type: varchar, required: true }
+    is_closed:      { type: boolean, required: false, default: false}
+    created_at:     ~
+    updated_at:     ~
+     
+  # конфиги для бота
+  botconfig:
+    _attributes:            { phpName: botconfig }
+    id:                     ~
+    # создатель конфига
+    user_id:                { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    name:                   { type: varchar, required: true }
+    description:            { type: longvarchar, required: true }
+    body:                   { type: longvarchar, required: true }
+    # если задана цена - конфиг будет продаваться по ней. Если нет - цена рассчитается исходя из количества продаж
+    price:                  { type: integer, required: false, default: 0 }
+    price_koef:             { type: integer, required: false, default: 0 }
+    # подтвержденный - виден в магазине конфигов
+    is_approved:            { type: boolean, required: false, default: false}
+    # глобальный конфиг доступен всем по умолчанию
+    is_global:              { type: boolean, required: false, default: false}
+    # конфиг нельзя редактировать, если у него были продажи 
+    # или есть связи с продаваемыми конфигами.
+    is_editable:        { type: boolean, required: false, default: true}
+    created_at:             ~
+    updated_at:             ~
+    
+  # связи между конфигами (для подключения други конфигов)
+  botconfig_relations:
+    _attributes:            { phpName: botconfigRelations }
+    id:                     ~
+    botconfig_id: { type: integer, foreignTable: botconfig, foreignReference: id, required: true, onDelete: cascade }
+    parent_botconfig_id: { type: integer, foreignTable: botconfig, foreignReference: id, required: true, onDelete: cascade }
+    
+  # статусы конфига (типа, новый, проверенный, и тд) По факту почти статичные данные.
+  config_status:
+    _attributes:  { phpName:  configStatus}
+    id:           ~
+    name:         { type: varchar, required: true }
+    description:  { type: longvarchar, required: true }
+      
+  # категории конфигов
+  config_category:
+    _attributes:  { phpName:  configCategory }
+    id:           ~
+    name:         { type: varchar, required: true }
+    description:  { type: longvarchar, required: true }
+    
+  cros_config_category:
+    _attributes:  { phpName:  crosConfigCategory }
+    id:           ~
+    botconfig_id: { type: integer, foreignTable: botconfig, foreignReference: id, required: true, onDelete: cascade }
+    # категория конфигов - по ней будут фильтры в магазине конфигов
+    config_category_id:     { type: integer, foreignTable: config_category, foreignReference: id, required: true, onDelete: cascade }
+    
+  cros_user_config:
+    _attributes:  { phpName:  crosUserConfig }
+    id:           ~
+    user_id:      { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    botconfig_id: { type: integer, foreignTable: botconfig, foreignReference: id, required: true, onDelete: cascade }
+    # дата окончания пользования конфигом, если пустая - конфиг выдан на неограниченное количество времени
+    date_end:     { type: varchar, required: true }
+    created_at:   ~
+    updated_at:   ~
+    
+  # лицензии на использование бота
+  license:
+    _attributes:  { phpName: license }
+    id:           ~
+    user_id:      { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    # дата окончания действия лицензии yyyy-mm-dd
+    # вместо chars_count будет использоваться количество привязанных персов
+    #    chars_count:  { type: integer, required: true }
+    date_end:     { type: varchar, required: true }
+    # количество месяцев. на которое покупается лицензия
+    created_at:   ~
+    updated_at:   ~
+
+# все хуйня, надо по новой    
+#  # персонажи, привязываются к лицензии
+#  license_char:
+#    _attributes:  { phpName: licenseChar }
+#    id:           ~
+#    license_id:   { type: integer, foreignTable: license, foreignReference: id, required: true, onDelete: cascade }
+#    name:         { type: varchar, required: true }
+#    hash:         { type: varchar, required: true }
+#    date_end:     { type: varchar, required: true }
+  
+  # места для персонажей
+  llicense_chars_places:
+    _attributes:  { phpName: licenseCharsPlaces }
+    id:           ~
+    license_id:   { type: integer, foreignTable: license, foreignReference: id, required: true, onDelete: cascade }
+    chars_count:  { type: integer, required: true }
+    date_end:     { type: varchar, required: true }
+    created_at:   ~
+    updated_at:   ~
+    
+
+  # операции со счетом
+  balance_operation:
+    _attributes:        { phpName: balanceOperation }
+    id:                 ~
+    # тип операции (определенны в классе модели)
+    type_id:            { type: integer, required: true }
+    user_id:            { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    # информация об операции - зависит от типа операции, при пополнении счета - это номер транзакции, 
+    # при покупке/продлении лиценции - id лицензии, при покупке конфига - id конфига и тд
+    # подробное описание в документации к классу модели.
+    sum:                { type: float, required: true }
+    operation_data:     { type: integer, required: true }
+    # дополнительная информация (делали операции, комментарии и тд)
+    additional:         { type: longvarchar, required: false }
+    created_at:   ~
+    updated_at:   ~
+    
+    
+    
+    

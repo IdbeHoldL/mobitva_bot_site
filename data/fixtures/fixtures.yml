@@ -1,0 +1,125 @@
+# # Populate this file with data to be loaded by your ORM's *:data-load task.
+# # You can create multiple files in this directory (i.e. 010_users.yml,
+# # 020_articles.yml, etc) which will be loaded in alphabetical order.
+# # 
+# # See documentation for your ORM's *:data-load task for more information.
+# 
+# User:
+#   fabien:
+#     username: fabien
+#     password: changeme
+#     name:     Fabien Potencier
+#     email:    fabien.potencier@symfony-project.com
+#   kris:
+#     username: Kris.Wallsmith
+#     password: changeme
+#     name:     Kris Wallsmith
+#     email:    kris.wallsmith@symfony-project.com
+
+# пользователи
+sfGuardUser:
+  adminuser:
+    username: admin
+    password: admin
+    is_active: 1
+    is_super_admin: 1
+  user1:
+    username: user1
+    password: user1
+    is_active: 1
+    is_super_admin: 1
+   
+sfGuardUserProfile:
+  adminuserProfile:
+    user_id: adminuser
+    balance: 10000
+    auth_key: admin_auth_key
+    nickname: idbeHoldl
+  user1Profile:
+    user_id: user1
+    balance: 10000
+    nickname: user 1
+
+# группы пользователей
+
+sfGuardGroup:
+  administators:
+    name: administrator
+    description: administrator
+  moderators:
+    name: moderator
+    description: moderator
+    
+# права
+    
+sfGuardPermission:
+  root:
+    name: root
+    description: "access: full"
+  tickets:
+    name: tickets
+    description: "access: tickets"
+
+# права на группы
+
+sfGuardGroupPermission:
+  AdministratorPermission:
+    group_id: administators
+    permission_id: root
+  ModeratorsPermission:
+    group_id: moderators
+    permission_id: tickets
+
+# группы пользователей
+
+sfGuardUserGroup:
+  AdminUserGroup:
+    user_id: adminuser
+    group_id: administators
+
+## категории конфигов
+#configCategory:
+#  engine:
+#    name: mobitva bot engine (idbeHoldL)
+#    description: Тут конфиги описывающие все поведение бота. Обработка событий.
+#  quests:
+#    name: Квесты
+#    description: Все связанное с квестами, выполнением заданий
+#  dueles:
+#    name: Дуэли/Бои с игроками
+#    description: Все связанное с боем против реального игрока. Дуэли, выживания, открытые бои, грабежи и тд.
+#  others:
+#    name: прочие конфиги
+#    description: То, что не попадает в другие категории.
+    
+# конфиги
+#botconfig:
+#  test_config:
+#    user_id: adminuser
+#    is_default: true
+#    name: Главный конфиг
+#    description: Тут описываются секции, необходимые для использования чужих скриптов. Не пишите тут ничего, если не знаете что это
+#    body: ; тут ничего нет
+#    price: 10
+    
+# связь конфиги-категории
+#crosConfigCategory:
+#  test_config_others:
+#    botconfig_id: test_config_2
+#    config_category_id: others
+#  test_config_engine:
+#    botconfig_id: test_config_2
+#    config_category_id: engine
+    
+# лизензия
+license:
+  admin_license:
+    user_id: adminuser
+    date_end: "2013-02-15"
+  
+  
+  
+
+    
+    
+    

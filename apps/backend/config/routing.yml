@@ -1,0 +1,125 @@
+mobitvabot_config:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotConfig
+    module:               mobitvabot_config
+    prefix_path:          /mobitvabot_config
+    column:               id
+    with_wildcard_routes: true
+
+mobitvabot_config_group:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotConfigGroup
+    module:               mobitvabot_config_group
+    prefix_path:          /mobitvabot_config_group
+    column:               id
+    with_wildcard_routes: true
+
+mobitvabot_files:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotFiles
+    module:               mobitvabotFiles
+    prefix_path:          /mobitvabotFiles
+    column:               id
+    with_wildcard_routes: true
+
+mobitvabot_faq:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotFaq
+    module:               mobitvabot_faq
+    prefix_path:          /mobitvabot_faq
+    column:               id
+    with_wildcard_routes: true
+
+mobitvabot_news:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotNews
+    module:               mobitvabot_news
+    prefix_path:          /mobitvabot_news
+    column:               id
+    with_wildcard_routes: true
+
+mobitvabot_transaction:
+  class: sfPropelRouteCollection
+  options:
+    model:                mobitvabotTransaction
+    module:               mobitvabot_transaction
+    prefix_path:          /mobitvabot_transaction
+    column:               id
+    with_wildcard_routes: true
+
+sf_guard_user_group:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardUserGroup
+    module:               sf_guard_user_group
+    prefix_path:          /sf_guard_user_group
+    column:               user_id
+    with_wildcard_routes: true
+
+sf_guard_group_permission:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardGroupPermission
+    module:               sf_guard_group_permission
+    prefix_path:          /sf_guard_group_permission
+    column:               group_id
+    with_wildcard_routes: true
+
+sf_guard_permission:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardPermission
+    module:               sf_guard_permission
+    prefix_path:          /sf_guard_permission
+    column:               id
+    with_wildcard_routes: true
+
+sf_guard_group:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardGroup
+    module:               sf_guard_group
+    prefix_path:          /sf_guard_group
+    column:               id
+    with_wildcard_routes: true
+
+sf_guard_user_profile:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardUserProfile
+    module:               sf_guard_user_profile
+    prefix_path:          /sf_guard_user_profile
+    column:               id
+    with_wildcard_routes: true
+
+sf_guard_user:
+  class: sfPropelRouteCollection
+  options:
+    model:                sfGuardUser
+    module:               sf_guard_user
+    prefix_path:          /sf_guard_user
+    column:               id
+    with_wildcard_routes: true
+
+
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: index, action: index }
+
+# generic rules
+# please, remove them by adding more specific rules
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

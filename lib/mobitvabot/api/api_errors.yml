@@ -1,0 +1,10 @@
+## YAML Template.
+---
+
+errors:
+  method_not_found:
+    code: 404
+    description: "method not found"
+  method_not_method_lol:
+    code: 4004
+    description: "method not method, lol"

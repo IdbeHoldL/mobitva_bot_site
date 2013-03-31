@@ -1,0 +1,138 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+# default rules
+homepage:
+  url:   /
+  param: { module: index, action: index }
+  
+# ----- bot API ---------
+
+bot_api_index:
+  url:   /botapi/index/testparam_1/:testparam_2/:testparam_3
+  param: { module: botapi, action: index }
+  
+# авторизация. ответ - хеш для дальнейшего доступа, либо
+bot_api_signin:
+  url:   /botapi/signin/:username/:access_key/:hardware_key
+  param: { module: botapi, action: signin }
+  
+bot_api_run_method:
+  url:   /botapi/method/:method_name/:session_id/:access_key/
+  param: { module: botapi, action: runMethod }
+
+# ----- end bot API ----- 
+  
+  
+
+sf_guard_signin:
+  url:   /login
+  param: { module: sfGuardAuth, action: signin }
+ 
+sf_guard_signout:
+  url:   /logout
+  param: { module: sfGuardAuth, action: signout }
+ 
+sf_guard_password:
+  url:   /request_password
+  param: { module: sfGuardAuth, action: password }
+
+register:
+  url:   /register
+  param: { module: auth, action: signup }
+  
+manual:
+  url:   /manual
+  param: { module: index, action: manual }
+
+configs:
+  url:   /configs
+  param: { module: index, action: configList }
+  
+my_configs:
+  url:   /my_configs
+  param: { module: configs, action: index }
+config_edit:
+  url:   /edit_config/:id
+  param: { module: configs, action: configForm }
+config_new:
+  url:   /new_config
+  param: { module: configs, action: configForm }
+  
+config:
+  url:   /config/:id
+  param: { module: index, action: config }
+  
+byebot:
+  url:   /byebot
+  param: { module: payment, action: index }
+  
+license:
+  url:   /license
+  param: { module: license, action: index }
+
+add_days:
+  url:   /add_days
+  param: { module: license, action: addDays }
+  
+add_chars:
+  url:   /add_chars
+  param: { module: license, action: addChars }
+
+confirm:
+  url:   /confirm
+  param: { module: payment, action: confirm }
+
+success:
+  url:   /success
+  param: { module: payment, action: paymentOk }
+
+fail:
+  url:   /fail
+  param: { module: payment, action: paymentFail }
+
+w1log:
+  url:   /w1log
+  param: { module: payment, action: w1log }
+  
+commands:
+  url:   /commands
+  param: { module: index, action: commands }
+
+faq:
+  url:   /faq
+  param: { module: index, action: faq }
+  
+kemulatorManual:
+  url:   /kemulatorManual
+  param: { module: index, action: kemulatorManual }
+  
+downloadList:
+  url:   /downloadList
+  param: { module: index, action: downloadList }
+  
+downloadAuthFile:
+  url:   /downloadAuthFile
+  param: { module: index, action: downloadAuthFile}
+  
+download:
+  url:   /download/:file_id
+  param: { module: index, action: download }
+
+contactComments:
+  url:   /ContactComments
+  param: { module: index, action: contactComments }
+  
+botAuth:
+  url:   /botAuth/:username/:access_key
+  param: { module: index, action: botAuth }
+
+# generic rules
+# please, remove them by adding more specific rules
+
+default_index:
+  url:   /:module
+  param: { action: index }
+
+default:
+  url:   /:module/:action/*

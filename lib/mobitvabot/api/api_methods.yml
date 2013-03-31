@@ -1,0 +1,54 @@
+## YAML Template.
+---
+
+methods:
+  getPlaces:
+    description: " - возвращает список мест (заведений) для одного или нескольких городов"
+    params:
+      city_id:
+        type: array
+        required: true
+        description: "(array) id городов: [1,22,27]"
+        
+  getAlbums:
+    description: " - возвращает список альбомов"
+    params:
+      places:
+        type: array
+        required: false
+        description: "(array) id мест: [1,22,27]"
+      providers:
+        type: array
+        required: false
+        description: "(array) id студий: [1,22,27]"
+      date:
+        type: string
+        required: true
+        description: "(array) id студий: [1,22,27]"
+      search:
+        type: string
+        required: true
+        description: "(array) id студий: [1,22,27]"
+  parseAlbum:
+    description: "стучиться в парсер. создает альбом"
+    params:
+      provider_id:
+        type: string
+        required: true
+        description: "id студии"
+      image_preview_prefix:
+        type: string
+        required: false
+        description: "префикс до превьюшки"
+      image_original_prefix:
+        type: string
+        required: false
+        description: "префикс до оригинала"
+      is_photo_links:
+        type: string
+        required: false
+        description: "ислользовать ссылки до фото"
+      urls:
+        type: array
+        required: true
+        description: "ссылки"
