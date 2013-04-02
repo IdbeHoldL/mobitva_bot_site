@@ -10,14 +10,17 @@
  */
 class botapiActions extends sfActions {
 
-  protected $ERROR_NO_USER = 'ERROR_NO_USER';
-  protected $ERROR_USER_NO_ACTIVE = 'ERROR_USER_NO_ACTIVE';
-  protected $ERROR_WRONG_USER_AUTH_KEY = 'ERROR_WRONG_USER_AUTH_KEY';
-  protected $ERROR_ERROR_OPEN_SESSION = 'ERROR_ERROR_OPEN_SESSION';
-  protected $ERROR_NO_LICENSE = 'ERROR_NO_LICENSE';
-  protected $ERROR_LICENSE_NO_ACTIVE = 'ERROR_LICENSE_NO_ACTIVE';
-  protected $ERROR_WRONG_OR_EXPIRED_SESSION = 'ERROR_WRONG_OR_EXPIRED_SESSION';
-
+  protected $ERROR_NO_USER = 'Не найден пользователь';
+  protected $ERROR_USER_NO_ACTIVE = 'Пользователь неактивен/заблокирован';
+  protected $ERROR_WRONG_USER_AUTH_KEY = 'Неверный ключ';
+  protected $ERROR_ERROR_OPEN_SESSION = 'Ошибка авторизации (невозможно открыть сессию)';
+  protected $ERROR_NO_LICENSE = 'Нет лицензии';
+  protected $ERROR_LICENSE_NO_ACTIVE = 'Лицензия неактивна';
+  protected $ERROR_WRONG_OR_EXPIRED_SESSION = 'Время жизни сессии истекло';
+  protected $ERROR_BAD_VERSION = 'Ваша версия бота устарела и отключена. Новая версия бота доступна для скачивания на сайте (http://mobitva-bot.ru)';
+  
+  
+  protected $BOT_VERSION = '1.1';
   /**
    * Возврашает параметр в кодировке utf-8 (ожидается windows-1251)
    * @param sfWebRequest $request запрос
@@ -115,15 +118,21 @@ class botapiActions extends sfActions {
     $username = $this->getUrlParam($request, 'username'); // username
     $authKey = $this->getUrlParam($request, 'access_key');
     $hardwareKey = $this->getUrlParam($request, 'hardware_key');
-	
+    $bot_version = $this->getUrlParam($request, 'bot_version');
+
+    if ($bot_version < str_replace('.', '', $this->BOT_VERSION)){
+      echo $this->ERROR_BAD_VERSION;
+      return sfView::NONE;
+    }
+
     // если пользователя не существует
     if (!$user = sfGuardUserPeer::retrieveByPk($username)) {
       echo $this->ERROR_NO_USER;
       return sfView::NONE;
     }
-	
-	$username = $user->getUsername();
-	
+
+    $username = $user->getUsername();
+
     // если пользователь не активен
     if (!$user->getIsActive()) {
       echo $this->ERROR_USER_NO_ACTIVE;
@@ -188,13 +197,48 @@ class botapiActions extends sfActions {
     }
 
     $response =
-      $botSession->getId() . '-' .
-      $botSession->getAccessKey() . '-' .
-      $user->getProfile()->getId() . '-' .
-      $license->getId();
+            $botSession->getId() . '-' .
+            $botSession->getAccessKey() . '-' .
+            $user->getProfile()->getId() . '-' .
+            $license->getId();
 
     echo $response;
     return sfView::NONE;
   }
+  
+  public function executeAddSessionTime(sfWebRequest $request) {
+    
+    $session_id = $this->getUrlParam($request, 'session_id');
+    $hardwareKey = $this->getUrlParam($request, 'hardware_key');
+    
+    if (!$botSession = botSessionPeer::retrieveByPK($session_id)){
+      echo 'no session';
+      return sfView::NONE;
+    }
+    
+    if ($botSession->getIsClosed()){
+      echo 'ession is closed';
+      return sfView::NONE;
+    }
+    
+    if ($botSession->getHardwareKey() != $hardwareKey){
+      echo 'wrong key';
+      return sfView::NONE;
+    }
+    
+    if ($botSession->getUpdatedAt() < date('Y-m-d h:i:s', time() - botSessionPeer::$BOT_SESSION_TIMEOUT) ){
+      $botSession->setIsClosed(true);
+      $botSession->save();
+      echo 'expired time';
+      return sfView::NONE;
+    }
+    
+    $botSession->setUpdatedAt(date('Y-m-d h:i:s', time()));
+    $botSession->save();
+            
+    echo 1;
+    return sfView::NONE;
+  }
+  
 
 }

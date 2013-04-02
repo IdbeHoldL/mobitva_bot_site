@@ -93,6 +93,7 @@ CREATE TABLE `botconfig`
 	`body` TEXT  NOT NULL,
 	`price` INTEGER default 0,
 	`price_koef` INTEGER default 0,
+	`weight` INTEGER default 0,
 	`is_approved` TINYINT default 0,
 	`is_global` TINYINT default 0,
 	`is_editable` TINYINT default 1,

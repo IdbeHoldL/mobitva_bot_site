@@ -53,6 +53,8 @@ propel:
     # если задана цена - конфиг будет продаваться по ней. Если нет - цена рассчитается исходя из количества продаж
     price:                  { type: integer, required: false, default: 0 }
     price_koef:             { type: integer, required: false, default: 0 }
+    # "вес" конфига - для сортировки в меню
+    weight:                 { type: integer, required: false, default: 0 }
     # подтвержденный - виден в магазине конфигов
     is_approved:            { type: boolean, required: false, default: false}
     # глобальный конфиг доступен всем по умолчанию

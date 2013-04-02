@@ -19,8 +19,8 @@ class botSessionPeer extends BasebotSessionPeer {
 
 //  public static $BOT_SESSION_TIMEOUT = 60; // 60 сек
 
-//  public static $BOT_SESSION_TIMEOUT = 900; // 15 мин
-  public static $BOT_SESSION_TIMEOUT = 86400; // сутки (!!!!!! костыль !!!!!)
+  public static $BOT_SESSION_TIMEOUT = 900; // 15 мин
+//  public static $BOT_SESSION_TIMEOUT = 86400; // сутки (!!!!!! костыль !!!!!)
 
   /**
    * Получить ip адрес пользователя

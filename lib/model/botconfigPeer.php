@@ -26,7 +26,7 @@ class botconfigPeer extends BasebotconfigPeer {
 
     $c = new Criteria();
     $c->add(self::USER_ID, $userId);
-
+    $c->add(self::IS_GLOBAL, false);
     return self::doSelect($c);
   }
 
@@ -49,13 +49,13 @@ class botconfigPeer extends BasebotconfigPeer {
   }
 
   public static function checkUserConfigAccess($userId, $configId) {
-  
-	if ($config= self::retrieveByPk($configId)){
-		if ($config->getIsGlobal()){
-			return true;
-		}
-	}
-  
+
+    if ($config = self::retrieveByPk($configId)) {
+      if ($config->getIsGlobal()) {
+        return true;
+      }
+    }
+
     $c = new Criteria();
     $c->add(crosUserConfigPeer::USER_ID, $userId);
     $c->add(crosUserConfigPeer::BOTCONFIG_ID, $configId);
@@ -63,12 +63,12 @@ class botconfigPeer extends BasebotconfigPeer {
 
     return self::doCount($c);
   }
-  
-  public static function getGlobalConfigs(){
-    
+
+  public static function getGlobalConfigs() {
+
     $c = new Criteria();
     $c->add(self::IS_GLOBAL, true);
-    
+    $c->addDescendingOrderByColumn(self::WEIGHT);
     return self::doSelect($c);
   }
 
