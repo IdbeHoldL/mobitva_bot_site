@@ -20,7 +20,11 @@ bot_api_signin:
 bot_api_signin_add_session_time:
   url:   /botapi/add_session_time/:session_id/:hardware_key
   param: { module: botapi, action: addSessionTime }
-  
+
+bot_api_get_auth_key:
+  url:   /botapi/method/get_auth_key
+  param: { module: botapi, action: getAuthKey }
+
 bot_api_run_method:
   url:   /botapi/method/:method_name/:session_id/:access_key/
   param: { module: botapi, action: runMethod }

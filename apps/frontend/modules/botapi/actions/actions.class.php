@@ -18,9 +18,8 @@ class botapiActions extends sfActions {
   protected $ERROR_LICENSE_NO_ACTIVE = 'Лицензия неактивна';
   protected $ERROR_WRONG_OR_EXPIRED_SESSION = 'Время жизни сессии истекло';
   protected $ERROR_BAD_VERSION = 'Ваша версия бота устарела и отключена. Новая версия бота доступна для скачивания на сайте (http://mobitva-bot.ru)';
-  
-  
   protected $BOT_VERSION = '1.1';
+
   /**
    * Возврашает параметр в кодировке utf-8 (ожидается windows-1251)
    * @param sfWebRequest $request запрос
@@ -54,6 +53,23 @@ class botapiActions extends sfActions {
     header('Content-Type: text/html; charset=utf-8');
 
     echo $responce;
+    return sfView::NONE;
+  }
+
+  public function executeGetAuthKey(sfWebRequest $request) {
+    if (!isset($_REQUEST['login']) || !isset($_REQUEST['password'])) {
+      echo 'Неверные параметры';
+      return SFview::NONE;
+    }
+    
+    $user = sfGuardUserPeer::retrieveByUsername($_REQUEST['login']);
+
+    if (!$user->checkPassword($_REQUEST['password'])){
+      echo 'Неправильная пара логин-пароль!';
+      return sfView::NONE;
+    }
+
+    echo $user->getId() .'-'.$user->getProfile()->getAuthKey();
     return sfView::NONE;
   }
 
@@ -120,7 +136,7 @@ class botapiActions extends sfActions {
     $hardwareKey = $this->getUrlParam($request, 'hardware_key');
     $bot_version = $this->getUrlParam($request, 'bot_version');
 
-    if ($bot_version < str_replace('.', '', $this->BOT_VERSION)){
+    if ($bot_version < str_replace('.', '', $this->BOT_VERSION)) {
       echo $this->ERROR_BAD_VERSION;
       return sfView::NONE;
     }
@@ -205,40 +221,39 @@ class botapiActions extends sfActions {
     echo $response;
     return sfView::NONE;
   }
-  
+
   public function executeAddSessionTime(sfWebRequest $request) {
-    
+
     $session_id = $this->getUrlParam($request, 'session_id');
     $hardwareKey = $this->getUrlParam($request, 'hardware_key');
-    
-    if (!$botSession = botSessionPeer::retrieveByPK($session_id)){
+
+    if (!$botSession = botSessionPeer::retrieveByPK($session_id)) {
       echo 'no session';
       return sfView::NONE;
     }
-    
-    if ($botSession->getIsClosed()){
+
+    if ($botSession->getIsClosed()) {
       echo 'ession is closed';
       return sfView::NONE;
     }
-    
-    if ($botSession->getHardwareKey() != $hardwareKey){
+
+    if ($botSession->getHardwareKey() != $hardwareKey) {
       echo 'wrong key';
       return sfView::NONE;
     }
-    
-    if ($botSession->getUpdatedAt() < date('Y-m-d h:i:s', time() - botSessionPeer::$BOT_SESSION_TIMEOUT) ){
+
+    if ($botSession->getUpdatedAt() < date('Y-m-d h:i:s', time() - botSessionPeer::$BOT_SESSION_TIMEOUT)) {
       $botSession->setIsClosed(true);
       $botSession->save();
       echo 'expired time';
       return sfView::NONE;
     }
-    
+
     $botSession->setUpdatedAt(date('Y-m-d h:i:s', time()));
     $botSession->save();
-            
+
     echo 1;
     return sfView::NONE;
   }
-  
 
 }
